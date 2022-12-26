@@ -1,8 +1,8 @@
 ## About the game "Wordle":
     
-Wordle gives players six chances to guess a randomly selected five-letter word. As shown above, if you have the right letter in the right spot, it shows up green. A correct letter in the wrong spot shows up yellow. A letter that isn't in the word in any spot shows up gray.
+    Wordle gives players six chances to guess a randomly selected five-letter word. As shown above, if you have the right letter in the right spot, it         shows up green. A correct letter in the wrong spot shows up yellow. A letter that isn't in the word in any spot shows up gray.
 
-A player has six chances to guess the correct word.
+    A player has six chances to guess the correct word.
 
 ## About the project and its development:
 
