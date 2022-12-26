@@ -2,8 +2,6 @@ import React from 'react';
 import App from './App'
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import First from "./components/first_page";
-import Second from "./components/second";
 // import App from './App';
 import {
   createBrowserRouter,
@@ -19,10 +17,6 @@ root.render(
     <BrowserRouter>
     <Routes>
           <Route index element={<App/>}/>
-          <Route path="/first" element={<First/>}/>
-          <Route path="/second" element={<Second/>}/>
-
-          <Route/>
 
     </Routes>
     </BrowserRouter>
