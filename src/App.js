@@ -234,9 +234,10 @@ function optWord()
 
   return (
       <>
-      <Label/>
+      <div className="contain_out">
       <div className="contain">
             <div className="rows">
+              <Label/>
               <Row rowno="_1" string={str1}/>
               <Row rowno="_2" string={str2}/>
               <Row rowno="_3" string={str3}/>
@@ -247,9 +248,10 @@ function optWord()
               <Lost word={temp_str}/>
               <Won/>
             </div>
-            
+
       </div>
       <Keyboard/>
+      </div>
       </>
   );
 }
