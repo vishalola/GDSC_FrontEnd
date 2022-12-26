@@ -4,7 +4,7 @@ window.onload=()=>{
     let keys=document.getElementsByClassName("key");
     for(let i=0;i<keys.length;i++)
     {
-        keys[i].addEventListener("click",()=>{
+        keys[i].addEventListener("touchstart",()=>{
             let id=keys[i].id;
         let keyevent=new KeyboardEvent('keydown',  {key:id});
         document.dispatchEvent(keyevent);
