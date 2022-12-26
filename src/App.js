@@ -8,15 +8,20 @@ import Lost from './components/lost.js'
 import Won from './components/won';
 import {words} from "./data/words.ts";
 function App() {
+  //Function to modify entered string on keypress
   function setCharAt(str,index,chr) {
     if(index > str.length-1) return str;
     return str.substring(0,index) + chr + str.substring(index+1);
 }
-function optWord()
+  //Function to choose random word from array;
+  function optWord()
   {
     let index=Math.floor(Math.random()*10000)%words.length;
     return words[index].toUpperCase().split("");
   }
+
+
+  //Declaring hooks;
   const [temp_str,setTemp_str]=useState(optWord());
   const [row_counter,setRow_counter]=useState(1);
   const [colum_counter,setColumn_counter]=useState(0);
@@ -28,8 +33,11 @@ function optWord()
   const [str6,setStr6]=useState("     ");
   const [scr,setScr]=useState(0);
   const [keyp,setKeyp]=useState("");
-  console.log(temp_str);
   let keypressed="";
+
+
+  //Entered data manipulation on keypress on keyboard:
+
   document.onkeydown=(e)=>{
     keypressed=e.key;
     setKeyp(e.key);
@@ -39,9 +47,11 @@ function optWord()
       x.style.backgroundColor="transparent";
     }, 150);
 
-    //Code for data filling:
+    //Code for data filling and deleting:
     if(keypressed=="Backspace")
     {
+      //Code for deletion:
+
       switch(row_counter)
       {
         case 1:
@@ -84,6 +94,8 @@ function optWord()
     }
     else if(keypressed!="Enter")
     {
+      //Code for data filling:
+
       switch(row_counter)
       {
         case 1:
@@ -128,109 +140,122 @@ function optWord()
     }
     else
     {
-    let select=document.querySelector(`#_${row_counter}`).childNodes;
-    for(let i=0;i<select.length;i++)
-    {
-      if(select[i].innerHTML==" ")
-      return;
-    }
-    setColumn_counter(0);
-    for(let i=0;i<select.length;i++)
-    {
-      if(temp_str.includes(select[i].innerHTML))
-      {
-        if(select[i].innerHTML!=temp_str[i])
-        {
-          select[i].style.backgroundColor="#979733";
-        }
-        else
-        {
-        select[i].style.backgroundColor="#007c00";
+     
+          let select=document.querySelector(`#_${row_counter}`).childNodes;
 
-        }
-      
-      }
-      else
-      {
-        select[i].style.backgroundColor="gray";
-      }
-    }
-    let wincheck=true;
-    for(let i=0;i<select.length;i++)
-    { 
+          //code to check incomplete word filling:
+
+          for(let i=0;i<select.length;i++)
+          {
+            if(select[i].innerHTML==" ")
+            return;
+          }
+
+          setColumn_counter(0);
+
+          //Code for color change as per validity of data entered:
+
+          for(let i=0;i<select.length;i++)
+          {
+            if(temp_str.includes(select[i].innerHTML))
+            {
+              if(select[i].innerHTML!=temp_str[i])
+              {
+                select[i].style.backgroundColor="#979733";
+              }
+              else
+              {
+              select[i].style.backgroundColor="#007c00";
+
+              }
+            
+            }
+            else
+            {
+              select[i].style.backgroundColor="gray";
+            }
+          }
           
-            if(select[i].style.backgroundColor!="rgb(0, 124, 0)")
-            wincheck=false;
-    }
-    if(wincheck)
-    {
-      //Code for winning the game:
-      let won=document.getElementById("won");
-      won.style.display="flex";
-      setScr(scr+10);
-      setTemp_str(optWord());
-      setTimeout(() => {
-      setRow_counter(1);
-      setStr1("     ");
-      setStr2("     ");
-      setStr3("     ");
-      setStr4("     ");
-      setStr5("     ");
-      setStr6("     ");
+          //Code to check result:
 
-      let row_items=document.getElementsByClassName("row_item");
-      for(let i=0;i<row_items.length;i++)
-      {
-        row_items[i].style.backgroundColor="";
-      }
-      won.style.display="none"; 
+          let wincheck=true;
+          for(let i=0;i<select.length;i++)
+          { 
+                
+                  if(select[i].style.backgroundColor!="rgb(0, 124, 0)")
+                  wincheck=false;
+          }
+          if(wincheck)
+          {
+            //Code for winning the game:
+            let won=document.getElementById("won");
+            won.style.display="flex";
+            setScr(scr+10);
+            setTemp_str(optWord());
+            setTimeout(() => {
+            setRow_counter(1);
+            setStr1("     ");
+            setStr2("     ");
+            setStr3("     ");
+            setStr4("     ");
+            setStr5("     ");
+            setStr6("     ");
 
-      }, 1000);
-      
+            let row_items=document.getElementsByClassName("row_item");
+            for(let i=0;i<row_items.length;i++)
+            {
+              row_items[i].style.backgroundColor="";
+            }
+            won.style.display="none"; 
 
-    }
-    else if(!wincheck && row_counter==6)
-    {
-      //Code for losing the game.
-  
-      let lost=document.getElementById("lost");
-      lost.style.display="flex";
-      setScr(0);
-      setTimeout(() => {
-      setTemp_str(optWord());
-      setRow_counter(1);
-      setStr1("     ");
-      setStr2("     ");
-      setStr3("     ");
-      setStr4("     ");
-      setStr5("     ");
-      setStr6("     ");
+            }, 1000);
+            
 
-      let row_items=document.getElementsByClassName("row_item");
-      for(let i=0;i<row_items.length;i++)
-      {
-        row_items[i].style.backgroundColor="";
-      }
-      lost.style.display="none";
+          }
+          else if(!wincheck && row_counter==6)
+          {
+            //Code for losing the game.
+        
+            let lost=document.getElementById("lost");
+            lost.style.display="flex";
+            setScr(0);
+            setTimeout(() => {
+            setTemp_str(optWord());
+            setRow_counter(1);
+            setStr1("     ");
+            setStr2("     ");
+            setStr3("     ");
+            setStr4("     ");
+            setStr5("     ");
+            setStr6("     ");
 
-      }, 1000);
+            let row_items=document.getElementsByClassName("row_item");
+            for(let i=0;i<row_items.length;i++)
+            {
+              row_items[i].style.backgroundColor="";
+            }
+            lost.style.display="none";
 
-    }
-    else
-      setRow_counter(row_counter+1);
-    }
+            }, 1000);
+
+          }
+          else
+            setRow_counter(row_counter+1);
+          }
   }  
-  useEffect(()=>{
-    if(colum_counter==6)
-    {
-      setColumn_counter(5);
-    }
-    if(colum_counter<0 && keyp=="Backspace")
-    {
-      setColumn_counter(0);
-    }
+    //Code to limit coloumn_counter between indices 0 and 4:
     
-  },[colum_counter])
+        useEffect(()=>{
+          if(colum_counter==6)
+          {
+            setColumn_counter(5);
+          }
+          if(colum_counter<0 && keyp=="Backspace")
+          {
+            setColumn_counter(0);
+          }
+          
+        },[colum_counter])
 
   return (
       <>
