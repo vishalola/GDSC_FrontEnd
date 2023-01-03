@@ -8,7 +8,8 @@
 
    This is a frontend React based project made by Vishal Ola made for Round 2 of GDSC's interview. Inspiration is taken from The New York Times' Wordle. 
    This project's code (all of CSS, JS, and JSX)  is written solely by Vishal Ola and is plag-free.
-
+## Bug 
+   For mobile devices, the touch keyboard works fine in Firefox browser but not in Chrome. I've tried to fix it but to no avail. Any suggestion would be very helpful.
 ## Developer's message:
    Hi! I'm Vishal Ola. I've made this project in a span of two days (I was busy with OpenCode organised by IIITA). Being a beginner, I understand I might have made some mistakes. I've tried to make this project as bug-free as possible. 
     Any suggestion is most welcomed!
