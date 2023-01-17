@@ -7,22 +7,30 @@ import Score from './components/score';
 import Lost from './components/lost.js'
 import Won from './components/won';
 import {words} from "./data/words.ts";
+import Valid from './components/valid';
 function App() {
+  
   //Function to modify entered string on keypress
   function setCharAt(str,index,chr) {
     if(index > str.length-1) return str;
     return str.substring(0,index) + chr + str.substring(index+1);
 }
   //Function to choose random word from array;
-  function optWord()
+  async function optWord()
   {
-    let index=Math.floor(Math.random()*10000)%words.length;
-    return words[index].toUpperCase().split("");
+    // let index=Math.floor(Math.random()*10000)%words.length;
+    // console.log(words[index])
+    // return words[index].toUpperCase().split("");
+      let res=await fetch('https://random-word-api.herokuapp.com/word?length=5');
+      let x=(await res.json())[0].toUpperCase().split("");
+      setTemp_str(x);
+      // return x[0].toUpperCase().split(" ");
   }
-
-
+  useEffect(()=>{
+    optWord();
+  },[]);
   //Declaring hooks;
-  const [temp_str,setTemp_str]=useState(optWord());
+  const [temp_str,setTemp_str]=useState([]);
   const [row_counter,setRow_counter]=useState(1);
   const [colum_counter,setColumn_counter]=useState(0);
   const [str1,setStr1]=useState("     ");
@@ -33,11 +41,10 @@ function App() {
   const [str6,setStr6]=useState("     ");
   const [scr,setScr]=useState(0);
   const [keyp,setKeyp]=useState("");
+  const [enteredS,setEnteredS]=useState("");
   let keypressed="";
-
-
   //Entered data manipulation on keypress on keyboard:
-
+  console.log(enteredS)
   document.onkeydown=(e)=>{
     keypressed=e.key;
     setKeyp(e.key);
@@ -51,7 +58,7 @@ function App() {
     if(keypressed=="Backspace")
     {
       //Code for deletion:
-
+      setEnteredS(enteredS.slice(0,-1));
       switch(row_counter)
       {
         case 1:
@@ -94,8 +101,11 @@ function App() {
     }
     else if(keypressed!="Enter")
     {
+      if(colum_counter<5)
+      {
+        setEnteredS(enteredS+keypressed);
+      }
       //Code for data filling:
-
       switch(row_counter)
       {
         case 1:
@@ -150,97 +160,114 @@ function App() {
             if(select[i].innerHTML==" ")
             return;
           }
-
-          setColumn_counter(0);
-
-          //Code for color change as per validity of data entered:
-
-          for(let i=0;i<select.length;i++)
-          {
-            if(temp_str.includes(select[i].innerHTML))
+          async function f1(){
+            let res= await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${enteredS}`);
+            if(res.status===404)
             {
-              if(select[i].innerHTML!=temp_str[i])
-              {
-                select[i].style.backgroundColor="#979733";
-              }
-              else
-              {
-              select[i].style.backgroundColor="#007c00";
-
-              }
-            
+              console.log("No such word");
+              let x=document.querySelector(".validbox");
+              x.style.top="70px";
+              setTimeout(()=>{
+              x.style.top="-50px";
+                
+              },1200)
+              return;
             }
             else
             {
-              select[i].style.backgroundColor="gray";
-            }
-          }
-          
-          //Code to check result:
-
-          let wincheck=true;
-          for(let i=0;i<select.length;i++)
-          { 
+              setColumn_counter(0);
+              setEnteredS("");
+              //Code for color change as per validity of data entered:
+    
+              for(let i=0;i<select.length;i++)
+              {
+                if(temp_str.includes(select[i].innerHTML))
+                {
+                  if(select[i].innerHTML!=temp_str[i])
+                  {
+                    select[i].style.backgroundColor="#979733";
+                  }
+                  else
+                  {
+                  select[i].style.backgroundColor="#007c00";
+    
+                  }
                 
-                  if(select[i].style.backgroundColor!="rgb(0, 124, 0)")
-                  wincheck=false;
-          }
-          if(wincheck)
-          {
-            //Code for winning the game:
-            let won=document.getElementById("won");
-            won.style.display="flex";
-            setScr(scr+10);
-            setTemp_str(optWord());
-            setTimeout(() => {
-            setRow_counter(1);
-            setStr1("     ");
-            setStr2("     ");
-            setStr3("     ");
-            setStr4("     ");
-            setStr5("     ");
-            setStr6("     ");
-
-            let row_items=document.getElementsByClassName("row_item");
-            for(let i=0;i<row_items.length;i++)
-            {
-              row_items[i].style.backgroundColor="";
-            }
-            won.style.display="none"; 
-
-            }, 1000);
+                }
+                else
+                {
+                  select[i].style.backgroundColor="gray";
+                }
+              }
+              
+              //Code to check result:
+    
+              let wincheck=true;
+              for(let i=0;i<select.length;i++)
+              { 
+                    
+                      if(select[i].style.backgroundColor!="rgb(0, 124, 0)")
+                      wincheck=false;
+              }
+              if(wincheck)
+              {
+                //Code for winning the game:
+                let won=document.getElementById("won");
+                won.style.display="flex";
+                setScr(scr+10);
+                optWord();
+                setTimeout(() => {
+                setRow_counter(1);
+                setStr1("     ");
+                setStr2("     ");
+                setStr3("     ");
+                setStr4("     ");
+                setStr5("     ");
+                setStr6("     ");
+    
+                let row_items=document.getElementsByClassName("row_item");
+                for(let i=0;i<row_items.length;i++)
+                {
+                  row_items[i].style.backgroundColor="";
+                }
+                won.style.display="none"; 
+    
+                }, 1000);
+                
+    
+              }
+              else if(!wincheck && row_counter==6)
+              {
+                //Code for losing the game.
             
-
-          }
-          else if(!wincheck && row_counter==6)
-          {
-            //Code for losing the game.
-        
-            let lost=document.getElementById("lost");
-            lost.style.display="flex";
-            setScr(0);
-            setTimeout(() => {
-            setTemp_str(optWord());
-            setRow_counter(1);
-            setStr1("     ");
-            setStr2("     ");
-            setStr3("     ");
-            setStr4("     ");
-            setStr5("     ");
-            setStr6("     ");
-
-            let row_items=document.getElementsByClassName("row_item");
-            for(let i=0;i<row_items.length;i++)
-            {
-              row_items[i].style.backgroundColor="";
+                let lost=document.getElementById("lost");
+                lost.style.display="flex";
+                setScr(0);
+                setTimeout(() => {
+                optWord();
+                setRow_counter(1);
+                setStr1("     ");
+                setStr2("     ");
+                setStr3("     ");
+                setStr4("     ");
+                setStr5("     ");
+                setStr6("     ");
+    
+                let row_items=document.getElementsByClassName("row_item");
+                for(let i=0;i<row_items.length;i++)
+                {
+                  row_items[i].style.backgroundColor="";
+                }
+                lost.style.display="none";
+    
+                }, 1000);
+    
+              }
+              else
+                setRow_counter(row_counter+1);
             }
-            lost.style.display="none";
-
-            }, 1000);
-
           }
-          else
-            setRow_counter(row_counter+1);
+          f1();
           }
   }  
     //Code to limit coloumn_counter between indices 0 and 4:
@@ -261,8 +288,9 @@ function App() {
       <>
       <div className="contain_out">
       <div className="contain">
+            <Valid/>
+            <Label/>
             <div className="rows">
-              <Label/>
               <Row rowno="_1" string={str1}/>
               <Row rowno="_2" string={str2}/>
               <Row rowno="_3" string={str3}/>

@@ -8,6 +8,7 @@ body
 }
 .contain
 {
+    /* outline:1px solid white; */
     width: 100vw;
     /* outline:1px solid white; */
     display: flex;
@@ -61,7 +62,7 @@ body
     font-weight: 100;
     /* outline: 1px solid white; */
     position: absolute;
-    top:-35px;
+    top:10px;
 }
 .key
 {
@@ -102,6 +103,17 @@ body
     align-items: center;
     user-select: none;
     display:none;
+}
+.validbox
+{
+    position: absolute;
+    top:-50px;
+    text-align: center;
+    background:white;
+    color:black;
+    z-index: 10;
+    padding: 5px 15px;
+    transition: all 0.15s ease-out;
 }
 @media screen and (max-width:650px) {
 
