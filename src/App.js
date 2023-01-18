@@ -49,10 +49,11 @@ function App() {
     keypressed=e.key;
     setKeyp(e.key);
     let x=document.getElementById(keypressed);
+    let init=x.style.backgroundColor;
     x.style.backgroundColor="gray";
     setTimeout(() => {
-      x.style.backgroundColor="transparent";
-    }, 150);
+      x.style.backgroundColor=init;
+    }, 50);
 
     //Code for data filling and deleting:
     if(keypressed=="Backspace")
@@ -162,7 +163,7 @@ function App() {
           }
           async function f1(){
             let res= await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${enteredS}`);
-            if(res.status===404)
+            if(res.status===404 && enteredS.toUpperCase().split("")!=temp_str)
             {
               console.log("No such word");
               let x=document.querySelector(".validbox");
@@ -186,10 +187,13 @@ function App() {
                   if(select[i].innerHTML!=temp_str[i])
                   {
                     select[i].style.backgroundColor="#979733";
+                    document.getElementById(`${select[i].innerHTML.toLowerCase()}`).style.backgroundColor="#979733";
                   }
                   else
                   {
                   select[i].style.backgroundColor="#007c00";
+                  document.getElementById(`${select[i].innerHTML.toLowerCase()}`).style.backgroundColor="#007c00";
+
     
                   }
                 
@@ -197,6 +201,8 @@ function App() {
                 else
                 {
                   select[i].style.backgroundColor="gray";
+                  document.getElementById(`${select[i].innerHTML.toLowerCase()}`).style.backgroundColor="gray";
+                  
                 }
               }
               
@@ -231,7 +237,12 @@ function App() {
                   row_items[i].style.backgroundColor="";
                 }
                 won.style.display="none"; 
-    
+                let keyss=document.getElementsByClassName('key');
+                for(let i=0;i<keyss.length;i++)
+                {
+                  keyss[i].style.backgroundColor="";
+                }
+
                 }, 1000);
                 
     
@@ -257,6 +268,11 @@ function App() {
                 for(let i=0;i<row_items.length;i++)
                 {
                   row_items[i].style.backgroundColor="";
+                }
+                let keyss=document.getElementsByClassName('key');
+                for(let i=0;i<keyss.length;i++)
+                {
+                  keyss[i].style.backgroundColor="";
                 }
                 lost.style.display="none";
     
@@ -287,9 +303,8 @@ function App() {
   return (
       <>
       <div className="contain_out">
-      <div className="contain">
+      <div className="contain"> 
             <Valid/>
-            <Label/>
             <div className="rows">
               <Row rowno="_1" string={str1}/>
               <Row rowno="_2" string={str2}/>
@@ -297,6 +312,7 @@ function App() {
               <Row rowno="_4" string={str4}/>
               <Row rowno="_5" string={str5}/>
               <Row rowno="_6" string={str6}/>
+              <Label/>
               <Score score={scr}/>
               <Lost word={temp_str}/>
               <Won/>
